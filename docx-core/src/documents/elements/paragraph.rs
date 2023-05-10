@@ -138,7 +138,7 @@ impl Paragraph {
         self
     }
 
-    pub fn add_run_ref(mut self, run: Run) {
+    pub fn add_run_ref(&mut self, run: Run) {
         self.children.push(ParagraphChild::Run(Box::new(run)));
     }
 
