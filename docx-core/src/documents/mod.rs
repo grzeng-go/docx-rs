@@ -1,4 +1,5 @@
 use std::{collections::HashMap, str::FromStr};
+use base64::engine::general_purpose::STANDARD;
 
 mod bookmark_id;
 mod build_xml;
@@ -87,7 +88,7 @@ impl ser::Serialize for Image {
     where
         S: ser::Serializer,
     {
-        let base64 = base64::display::Base64Display::with_config(&*self.0, base64::STANDARD);
+        let base64 = base64::display::Base64Display::new(&*self.0, &STANDARD);
         serializer.collect_str(&base64)
     }
 }
@@ -97,7 +98,7 @@ impl ser::Serialize for Png {
     where
         S: ser::Serializer,
     {
-        let base64 = base64::display::Base64Display::with_config(&*self.0, base64::STANDARD);
+        let base64 = base64::display::Base64Display::new(&*self.0, &STANDARD);
         serializer.collect_str(&base64)
     }
 }
