@@ -138,6 +138,10 @@ impl Paragraph {
         self
     }
 
+    pub fn add_run_ref(mut self, run: Run) {
+        self.children.push(ParagraphChild::Run(Box::new(run)));
+    }
+
     pub(crate) fn unshift_run(mut self, run: Run) -> Paragraph {
         self.children.insert(0, ParagraphChild::Run(Box::new(run)));
         self
