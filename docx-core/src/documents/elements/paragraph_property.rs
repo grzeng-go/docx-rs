@@ -120,6 +120,10 @@ impl ParagraphProperty {
         self
     }
 
+    pub fn add_tab_ref(&mut self, t: Tab) {
+        self.tabs.push(t);
+    }
+
     pub fn section_property(mut self, s: SectionProperty) -> Self {
         self.section_property = Some(s);
         self

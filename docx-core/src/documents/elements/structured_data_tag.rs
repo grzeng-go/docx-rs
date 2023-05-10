@@ -120,6 +120,11 @@ impl StructuredDataTag {
         self
     }
 
+    pub fn add_run_ref(&mut self, run: Run) {
+        self.children
+            .push(StructuredDataTagChild::Run(Box::new(run)));
+    }
+
     pub fn add_paragraph(mut self, p: Paragraph) -> Self {
         if p.has_numbering {
             self.has_numbering = true
@@ -129,6 +134,14 @@ impl StructuredDataTag {
         self
     }
 
+    pub fn add_paragraph_ref(&mut self, p: Paragraph) {
+        if p.has_numbering {
+            self.has_numbering = true
+        }
+        self.children
+            .push(StructuredDataTagChild::Paragraph(Box::new(p)));
+    }
+
     pub fn add_table(mut self, t: Table) -> Self {
         if t.has_numbering {
             self.has_numbering = true
@@ -136,6 +149,14 @@ impl StructuredDataTag {
         self.children
             .push(StructuredDataTagChild::Table(Box::new(t)));
         self
+    }
+
+    pub fn add_table_ref(&mut self, t: Table) {
+        if t.has_numbering {
+            self.has_numbering = true
+        }
+        self.children
+            .push(StructuredDataTagChild::Table(Box::new(t)));
     }
 
     pub fn data_binding(mut self, d: DataBinding) -> Self {

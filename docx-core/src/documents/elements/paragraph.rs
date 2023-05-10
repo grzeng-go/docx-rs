@@ -163,10 +163,19 @@ impl Paragraph {
         self
     }
 
+    pub fn add_hyperlink_ref(&mut self, link: Hyperlink) {
+        self.children.push(ParagraphChild::Hyperlink(link));
+    }
+
     pub fn add_structured_data_tag(mut self, t: StructuredDataTag) -> Self {
         self.children
             .push(ParagraphChild::StructuredDataTag(Box::new(t)));
         self
+    }
+
+    pub fn add_structured_data_tag_ref(&mut self, t: StructuredDataTag) {
+        self.children
+            .push(ParagraphChild::StructuredDataTag(Box::new(t)));
     }
 
     pub fn add_insert(mut self, insert: Insert) -> Paragraph {
@@ -174,9 +183,17 @@ impl Paragraph {
         self
     }
 
+    pub fn add_insert_ref(&mut self, insert: Insert) {
+        self.children.push(ParagraphChild::Insert(insert));
+    }
+
     pub fn add_delete(mut self, delete: Delete) -> Paragraph {
         self.children.push(ParagraphChild::Delete(delete));
         self
+    }
+
+    pub fn add_delete_ref(&mut self, delete: Delete) {
+        self.children.push(ParagraphChild::Delete(delete));
     }
 
     pub fn add_bookmark_start(mut self, id: usize, name: impl Into<String>) -> Paragraph {
@@ -185,10 +202,20 @@ impl Paragraph {
         self
     }
 
+    pub fn add_bookmark_start_ref(&mut self, id: usize, name: impl Into<String>) {
+        self.children
+            .push(ParagraphChild::BookmarkStart(BookmarkStart::new(id, name)));
+    }
+
     pub fn add_bookmark_end(mut self, id: usize) -> Paragraph {
         self.children
             .push(ParagraphChild::BookmarkEnd(BookmarkEnd::new(id)));
         self
+    }
+
+    pub fn add_bookmark_end_ref(&mut self, id: usize) {
+        self.children
+            .push(ParagraphChild::BookmarkEnd(BookmarkEnd::new(id)));
     }
 
     pub fn add_comment_start(mut self, comment: Comment) -> Paragraph {
@@ -198,10 +225,21 @@ impl Paragraph {
         self
     }
 
+    pub fn add_comment_start_ref(&mut self, comment: Comment) {
+        self.children.push(ParagraphChild::CommentStart(Box::new(
+            CommentRangeStart::new(comment),
+        )));
+    }
+
     pub fn add_comment_end(mut self, id: usize) -> Paragraph {
         self.children
             .push(ParagraphChild::CommentEnd(CommentRangeEnd::new(id)));
         self
+    }
+
+    pub fn add_comment_end_ref(&mut self, id: usize) {
+        self.children
+            .push(ParagraphChild::CommentEnd(CommentRangeEnd::new(id)));
     }
 
     pub fn align(mut self, alignment_type: AlignmentType) -> Paragraph {
@@ -247,6 +285,10 @@ impl Paragraph {
     pub fn add_tab(mut self, t: Tab) -> Self {
         self.property = self.property.add_tab(t);
         self
+    }
+
+    pub fn add_tab_ref(&mut self, t: Tab) {
+        self.property.add_tab_ref(t);
     }
 
     pub fn indent(

@@ -106,6 +106,13 @@ impl Document {
         self
     }
 
+    pub fn add_paragraph_ref(&mut self, p: Paragraph) {
+        if p.has_numbering {
+            self.has_numbering = true
+        }
+        self.children.push(DocumentChild::Paragraph(Box::new(p)));
+    }
+
     pub fn add_table(mut self, t: Table) -> Self {
         if t.has_numbering {
             self.has_numbering = true
@@ -114,16 +121,33 @@ impl Document {
         self
     }
 
+    pub fn add_table_ref(&mut self, t: Table) {
+        if t.has_numbering {
+            self.has_numbering = true
+        }
+        self.children.push(DocumentChild::Table(Box::new(t)));
+    }
+
     pub fn add_bookmark_start(mut self, id: usize, name: impl Into<String>) -> Self {
         self.children
             .push(DocumentChild::BookmarkStart(BookmarkStart::new(id, name)));
         self
     }
 
+    pub fn add_bookmark_start_ref(&mut self, id: usize, name: impl Into<String>) {
+        self.children
+            .push(DocumentChild::BookmarkStart(BookmarkStart::new(id, name)));
+    }
+
     pub fn add_bookmark_end(mut self, id: usize) -> Self {
         self.children
             .push(DocumentChild::BookmarkEnd(BookmarkEnd::new(id)));
         self
+    }
+
+    pub fn add_bookmark_end_ref(&mut self, id: usize) {
+        self.children
+            .push(DocumentChild::BookmarkEnd(BookmarkEnd::new(id)));
     }
 
     pub fn add_comment_start(mut self, comment: Comment) -> Self {
@@ -133,10 +157,21 @@ impl Document {
         self
     }
 
+    pub fn add_comment_start_ref(&mut self, comment: Comment) {
+        self.children.push(DocumentChild::CommentStart(Box::new(
+            CommentRangeStart::new(comment),
+        )));
+    }
+
     pub fn add_comment_end(mut self, id: usize) -> Self {
         self.children
             .push(DocumentChild::CommentEnd(CommentRangeEnd::new(id)));
         self
+    }
+
+    pub fn add_comment_end_ref(&mut self, id: usize) {
+        self.children
+            .push(DocumentChild::CommentEnd(CommentRangeEnd::new(id)));
     }
 
     pub fn page_size(mut self, size: PageSize) -> Self {
@@ -203,10 +238,23 @@ impl Document {
         self
     }
 
+    pub fn add_structured_data_tag_ref(&mut self, t: StructuredDataTag) {
+        if t.has_numbering {
+            self.has_numbering = true
+        }
+        self.children
+            .push(DocumentChild::StructuredDataTag(Box::new(t)));
+    }
+
     pub fn add_table_of_contents(mut self, t: TableOfContents) -> Self {
         self.children
             .push(DocumentChild::TableOfContents(Box::new(t)));
         self
+    }
+
+    pub fn add_table_of_contents_ref(&mut self, t: TableOfContents) {
+        self.children
+            .push(DocumentChild::TableOfContents(Box::new(t)));
     }
 
     pub fn columns(mut self, col: usize) -> Self {
