@@ -60,6 +60,10 @@ impl Table {
         self
     }
 
+    pub fn add_row_ref(&mut self, row: TableRow) {
+        self.rows.push(TableChild::TableRow(row));
+    }
+
     pub fn set_grid(mut self, grid: Vec<usize>) -> Table {
         self.grid = grid;
         self

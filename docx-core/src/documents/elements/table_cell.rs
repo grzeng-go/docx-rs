@@ -69,6 +69,13 @@ impl TableCell {
         self
     }
 
+    pub fn add_paragraph_ref(&mut self, p: Paragraph) {
+        if p.has_numbering {
+            self.has_numbering = true
+        }
+        self.children.push(TableCellContent::Paragraph(p));
+    }
+
     pub fn add_table_of_contents(mut self, t: TableOfContents) -> Self {
         self.children
             .push(TableCellContent::TableOfContents(Box::new(t)));
