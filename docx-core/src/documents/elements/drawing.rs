@@ -92,23 +92,31 @@ impl BuildXML for Box<Drawing> {
                     match p.position_h {
                         DrawingPosition::Offset(x) => {
                             let x = format!("{}", x as u32);
-                            b = b.pos_offset(&x).close();
+                            b = b.pos_offset(&x);
                         }
                         DrawingPosition::Align(x) => {
-                            b = b.align(&x.to_string()).close();
+                            b = b.align(&x.to_string());
                         }
                     }
                     if let DrawingPosition::Offset(x) = p.position_h {
                         let x = format!("{}", x as u32);
-                        b = b.pos_offset(&x).close();
+                        b = b.pos_offset(&x);
                     }
+
+                    b = match p.relative_from_h {
+                        _ => b.close()
+                    };
 
                     b = b.open_position_v(&format!("{}", p.relative_from_v));
 
                     if let DrawingPosition::Offset(y) = p.position_v {
                         let y = format!("{}", y as u32);
-                        b = b.pos_offset(&y).close();
+                        b = b.pos_offset(&y);
                     }
+
+                    b = match p.relative_from_v {
+                        _ => b.close()
+                    };
                 }
 
                 let w = format!("{}", p.size.0);
@@ -121,7 +129,8 @@ impl BuildXML for Box<Drawing> {
                 if p.allow_overlap {
                     b = b.wrap_none();
                 } else if p.position_type == DrawingPositionType::Anchor {
-                    b = b.wrap_square("bothSides");
+                    //b = b.wrap_square("bothSides");
+                    b = b.wrap_none();
                 }
                 b = b
                     .wp_doc_pr("1", "Figure")
@@ -134,15 +143,17 @@ impl BuildXML for Box<Drawing> {
                     .open_a_graphic("http://schemas.openxmlformats.org/drawingml/2006/main")
                     .open_a_graphic_data("http://schemas.openxmlformats.org/drawingml/2006/picture")
                     .add_child(&p.clone())
-                    .close()
                     .close();
+
+                b = b.close().close();
+
             }
             Some(DrawingData::TextBox(_t)) => unimplemented!("TODO: Support textBox writer"),
             None => {
                 unimplemented!()
             }
         }
-        b.close().close().build()
+        b.close().build()
     }
 }
 
@@ -265,6 +276,7 @@ mod tests {
         pic = pic.relative_from_v(RelativeFromVType::Paragraph);
         pic = pic.position_h(DrawingPosition::Align(PicAlign::Right));
         let d = Box::new(Drawing::new().pic(pic)).build();
+        println!("{}", str::from_utf8(&d).unwrap());
         assert_eq!(
             str::from_utf8(&d).unwrap(),
             r#"<w:drawing>
