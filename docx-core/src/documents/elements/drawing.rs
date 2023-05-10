@@ -129,7 +129,7 @@ impl BuildXML for Box<Drawing> {
                 if p.allow_overlap {
                     b = b.wrap_none();
                 } else if p.position_type == DrawingPositionType::Anchor {
-                    //b = b.wrap_square("bothSides");
+                    //b = b.wrap_square("bothSides");  //会导致文件打不开，改用wrap_none()
                     b = b.wrap_none();
                 }
                 b = b
